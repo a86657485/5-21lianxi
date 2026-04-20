@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, CheckCircle, Play } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Play, ArrowDown, Bird, Rabbit } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { triggerAITutor } from './AITutor';
 import confetti from 'canvas-confetti';
@@ -71,24 +71,38 @@ export function PythonVerifyLevel({ level, onBack, onWin }: { level: Level, onBa
 
            <div className="bg-white border-4 border-[#BAE6FD] rounded-[24px] p-5 shadow-sm flex-1 flex flex-col items-center">
               <div className="text-[#0369A1] font-bold mb-4 bg-[#E0F2FE] px-4 py-1 rounded-full border-2 border-[#7DD3FC]">遍历法流程图</div>
-              <div className="flex flex-col items-center flex-1 w-full text-sm font-bold text-[#475569] gap-2">
-                 <div className="bg-[#D1FAE5] px-4 py-2 rounded-xl border-2 border-[#34D399]">1. 初始化: a=35, b=0</div>
-                 <div className="text-[#94A3B8]">⬇</div>
-                 <div className="bg-[#FEF3C7] px-4 py-2 rounded-xl border-2 border-[#FBBF24]">2. 脚 c = a*2 + b*4</div>
-                 <div className="text-[#94A3B8]">⬇</div>
-                 <div className="bg-[#E0E7FF] w-20 h-20 rotate-45 border-2 border-[#818CF8] flex items-center justify-center my-2 shadow-[2px_2px_0_#A5B4FC]">
-                    <span className="-rotate-45 text-center leading-tight">c == 94?</span>
+              <div className="flex flex-col items-center flex-1 w-full text-sm font-bold text-[#475569] relative">
+                 <div className="bg-[#D1FAE5] px-4 py-2 rounded-full border-2 border-[#34D399] z-10 w-[140px] text-center shadow-sm">a=35, b=0</div>
+                 <ArrowDown size={18} className="text-[#94A3B8] my-1 z-10" />
+                 <div className="bg-[#FEF3C7] px-4 py-2 rounded-[12px] border-2 border-[#FBBF24] z-10 w-[140px] text-center shadow-sm">c = a*2 + b*4</div>
+                 <ArrowDown size={18} className="text-[#94A3B8] my-1 z-10" />
+                 <div className="bg-[#E0E7FF] w-16 h-16 rotate-45 border-2 border-[#818CF8] flex items-center justify-center my-3 shadow-sm z-10 bg-white">
+                    <span className="-rotate-45 text-center leading-tight text-xs font-black text-[#4F46E5] mt-1">c==94?</span>
                  </div>
-                 <div className="text-[#94A3B8]">⬇</div>
                  
-                 <div className="flex w-full justify-center gap-6 mt-1">
-                    <div className="flex flex-col items-center w-24">
-                      <span className="bg-[#10B981] text-white rounded px-2 py-0.5 text-xs mb-2">是</span>
-                      <div className="bg-[#FFEDD5] w-full text-center py-2 rounded-xl border-2 border-[#FB923C] text-xs">输出，<br/>结束循环</div>
+                 <div className="flex w-full justify-between items-start px-2 mt-4 relative">
+                    {/* True SVG lines backing the branches */}
+                    <svg className="absolute w-full h-full inset-0 pointer-events-none -top-12 z-0" style={{ left: 0, minHeight: '130px' }}>
+                       {/* Left line (Yes) */}
+                       <path d="M 50% 12 L 20% 12 L 20% 40" fill="none" stroke="#94A3B8" strokeWidth="2" />
+                       {/* Right line (No) */}
+                       <path d="M 50% 12 L 80% 12 L 80% 40" fill="none" stroke="#94A3B8" strokeWidth="2" />
+                       {/* Loop back line */}
+                       <path d="M 80% 120 L 80% 135 L 95% 135 L 95% -25 L 50% -25 L 50% -12" fill="none" stroke="#94A3B8" strokeWidth="2" strokeDasharray="4 4" />
+                       <polygon points="46,-16 54,-16 50,-8" fill="#94A3B8" />
+                    </svg>
+
+                    <div className="flex flex-col items-center w-[40%] z-10">
+                      <span className="bg-[#10B981] text-white rounded px-2 py-[2px] text-[10px] mb-2 shadow-sm leading-none">是 (Yes)</span>
+                      <div className="bg-[#FFEDD5] w-full text-center py-2 rounded-xl border-2 border-[#FB923C] text-xs shadow-sm">输出、<br/>结束循环</div>
                     </div>
-                    <div className="flex flex-col items-center w-24">
-                      <span className="bg-[#EF4444] text-white rounded px-2 py-0.5 text-xs mb-2">否</span>
-                      <div className="bg-[#FCE7F3] w-full text-center py-2 rounded-xl border-2 border-[#F472B6] text-xs">a减少1<br/>b增加1<br/>(返回计算)</div>
+                    <div className="flex flex-col items-center w-[40%] z-10">
+                      <span className="bg-[#EF4444] text-white rounded px-2 py-[2px] text-[10px] mb-2 shadow-sm leading-none">否 (No)</span>
+                      <div className="bg-[#FCE7F3] w-full text-center py-2 rounded-xl border-2 border-[#F472B6] text-xs shadow-sm flex flex-col gap-1">
+                        <span>a减1</span>
+                        <div className="w-full h-[1px] bg-[#FBCFE8]"></div>
+                        <span>b加1</span>
+                      </div>
                     </div>
                  </div>
               </div>
@@ -100,19 +114,28 @@ export function PythonVerifyLevel({ level, onBack, onWin }: { level: Level, onBa
            {/* Slider and Animation */}
            <div className="bg-white border-4 border-[#BFDBFE] rounded-[24px] p-4 lg:p-6 shadow-sm flex flex-col">
               <div className="flex justify-between items-center mb-4 border-b-2 border-[#E2E8F0] pb-2">
-                 <div className="font-bold text-[#1E293B] text-lg">🏃 模拟执行程序循环</div>
+                 <div className="font-bold text-[#1E293B] text-lg flex items-center gap-2">
+                   <div className="w-8 h-8 rounded-full bg-[#E0E7FF] flex items-center justify-center border-2 border-[#818CF8]">
+                     <Play size={16} className="text-[#4F46E5] ml-1" />
+                   </div> 
+                   模拟执行程序循环
+                 </div>
               </div>
 
               <div className="bg-[#F8FAFC] rounded-[16px] border-2 border-[#CBD5E1] p-4 flex flex-wrap gap-2 justify-center min-h-[120px] mb-6 items-center">
                  <AnimatePresence>
-                   <div className="flex flex-wrap justify-center gap-1">
+                   <div className="flex flex-wrap justify-center gap-2">
                      {Array.from({length: chickenGuess}).map((_, i) => (
-                       <motion.div key={`c-${i}`} layout className="text-2xl sm:text-3xl" initial={{scale:0}} animate={{scale:1}}>🐥</motion.div>
+                       <motion.div key={`c-${i}`} layout className="w-8 h-8 rounded-full bg-[#FEF08A] border-2 border-[#EAB308] flex items-center justify-center text-[#A16207]" initial={{scale:0}} animate={{scale:1}}>
+                         <Bird size={18} />
+                       </motion.div>
                      ))}
                    </div>
-                   <div className="flex flex-wrap justify-center gap-1 mt-2 lg:mt-0 lg:ml-4 border-t-2 lg:border-t-0 lg:border-l-2 border-dashed border-[#CBD5E1] pt-2 lg:pt-0 lg:pl-4">
+                   <div className="flex flex-wrap justify-center gap-2 mt-2 lg:mt-0 lg:ml-4 border-t-2 lg:border-t-0 lg:border-l-2 border-dashed border-[#CBD5E1] pt-2 lg:pt-0 lg:pl-4">
                      {Array.from({length: rabbitGuess}).map((_, i) => (
-                       <motion.div key={`r-${i}`} layout className="text-2xl sm:text-3xl" initial={{scale:0}} animate={{scale:1}}>🐰</motion.div>
+                       <motion.div key={`r-${i}`} layout className="w-8 h-8 rounded-full bg-[#E2E8F0] border-2 border-[#94A3B8] flex items-center justify-center text-[#475569]" initial={{scale:0}} animate={{scale:1}}>
+                         <Rabbit size={18} />
+                       </motion.div>
                      ))}
                    </div>
                  </AnimatePresence>
@@ -129,10 +152,10 @@ export function PythonVerifyLevel({ level, onBack, onWin }: { level: Level, onBa
                    onChange={e => setRabbitGuess(Number(e.target.value))}
                    className="w-full h-4 bg-[#FDE68A] rounded-lg appearance-none cursor-pointer accent-[#D97706]"
                  />
-                 <div className="flex justify-between items-center mt-2">
-                    <div className="text-sm sm:text-base font-bold text-[#B45309]">
+                  <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-4">
+                    <div className="text-sm sm:text-base font-bold text-[#B45309] flex-1 text-center sm:text-left bg-white/50 px-4 py-2 rounded-xl">
                       当前逻辑： a={chickenGuess}, b={rabbitGuess} <br/> 
-                      👉 算出的腿数 c = <span className="text-[20px] sm:text-[24px] text-[#EF4444]">{currentLegs}</span>
+                      算出的腿数 c = <span className="text-[20px] sm:text-[24px] text-[#EF4444]">{currentLegs}</span>
                     </div>
                     <button 
                       onClick={handleVerify}
@@ -146,7 +169,11 @@ export function PythonVerifyLevel({ level, onBack, onWin }: { level: Level, onBa
 
            {/* Record Table */}
            <div className="bg-white border-4 border-[#BFDBFE] rounded-[24px] p-4 shadow-sm flex-1 overflow-hidden flex flex-col min-h-[250px]">
-              <div className="font-bold text-[#0369A1] mb-2 px-2">📋 操作记录表 (变量监控)</div>
+              <div className="font-bold text-[#0369A1] mb-2 px-2 flex items-center gap-2">
+                <span className="bg-[#E0F2FE] p-1 rounded-lg border border-[#BAE6FD] flex items-center justify-center">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </span> 操作记录表 (变量监控)
+              </div>
               <div className="overflow-y-auto flex-1 border-2 border-[#E2E8F0] rounded-xl">
                  <table className="w-full text-center text-sm md:text-base border-collapse">
                     <thead className="bg-[#F1F5F9] sticky top-0 z-10 shadow-sm text-[#475569]">

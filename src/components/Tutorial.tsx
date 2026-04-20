@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, BrainCircuit, PawPrint, EyeOff } from 'lucide-react';
+import { ArrowLeft, BrainCircuit, PawPrint, EyeOff, Bird, Rabbit } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export function Tutorial({ onBack }: { onBack: () => void }) {
@@ -11,8 +11,11 @@ export function Tutorial({ onBack }: { onBack: () => void }) {
       title: "问题来了！",
       content: "农场里有个笼子，里面关着鸡和兔子。\n我们只能看到上面有 5 个头，下面有 14 条腿。\n怎么知道有几只鸡，几只兔子呢？",
       visual: (
-        <div className="flex justify-center gap-4 text-6xl my-8">
-          <div className="relative">👤👤👤👤👤<div className="absolute -bottom-8 left-0 text-lg w-full text-center text-blue-600 font-bold">5 个头</div></div>
+        <div className="flex justify-center gap-2 text-6xl my-8">
+          <div className="relative flex">
+            {Array.from({length: 5}).map((_, i) => <div key={i} className="text-gray-400 w-12 h-12 rounded-full border-4 border-gray-400 bg-gray-100 flex items-center justify-center -ml-2 text-2xl font-bold">?</div>)}
+            <div className="absolute -bottom-10 left-0 w-full text-center text-blue-600 font-bold text-lg">5 个头</div>
+          </div>
         </div>
       )
     },
@@ -20,9 +23,19 @@ export function Tutorial({ onBack }: { onBack: () => void }) {
       title: "神奇的“吹哨法”（抬腿法）",
       content: "农夫吹了一口响哨：“所有动物，抬起两条腿！”\n每只鸡抬起两条腿（坐到了地上）。\n每只兔子也抬起两条腿（用后腿站立）。",
       visual: (
-        <div className="flex justify-center gap-4 text-5xl my-8">
-          <motion.div animate={{y: [-10, 0]}} transition={{yoyo: Infinity, duration: 0.5}}>🐔🦶🦶</motion.div>
-          <motion.div animate={{y: [-10, 0]}} transition={{yoyo: Infinity, duration: 0.5}}>🐰🦶🦶</motion.div>
+        <div className="flex justify-center gap-8 text-5xl my-8">
+          <div className="flex gap-2 relative">
+             <Bird size={64} className="text-[#B45309]" />
+             <motion.div animate={{y: [-10, 0]}} transition={{yoyo: Infinity, duration: 0.5}} className="flex gap-1 absolute -right-6 -bottom-2 text-[#B45309]">
+               <PawPrint size={24} /> <PawPrint size={24} />
+             </motion.div>
+          </div>
+          <div className="flex gap-2 relative ml-12">
+             <Rabbit size={64} className="text-[#15803D]" />
+             <motion.div animate={{y: [-10, 0]}} transition={{yoyo: Infinity, duration: 0.5}} className="flex gap-1 absolute -right-6 -bottom-2 text-[#15803D]">
+               <PawPrint size={24} /> <PawPrint size={24} />
+             </motion.div>
+          </div>
         </div>
       )
     },
@@ -39,9 +52,15 @@ export function Tutorial({ onBack }: { onBack: () => void }) {
       title: "剩下的腿是谁的？",
       content: "现在鸡的2条腿都在空中，地上没有鸡的腿了！\n兔子有4条腿，抬起2条，还有2条腿在地上。\n所以，地上的4条腿全部都是兔子的！",
       visual: (
-         <div className="flex justify-center gap-8 my-8 text-4xl">
-            <div className="flex flex-col items-center opacity-50"><span>🐔</span><span className="text-sm">地上0腿</span></div>
-            <div className="flex flex-col items-center"><span>🐰</span><span className="text-sm text-red-500 font-bold">地上2腿</span></div>
+         <div className="flex justify-center gap-12 my-8 text-4xl">
+            <div className="flex flex-col items-center opacity-50">
+               <Bird size={48} className="text-[#B45309]" />
+               <span className="text-sm font-bold mt-2">地上0腿</span>
+            </div>
+            <div className="flex flex-col items-center">
+               <Rabbit size={48} className="text-[#15803D]" />
+               <span className="text-sm text-red-500 font-bold mt-2">地上2腿</span>
+            </div>
          </div>
       )
     },
@@ -49,9 +68,15 @@ export function Tutorial({ onBack }: { onBack: () => void }) {
       title: "大功告成！",
       content: "地上一共有 4 条腿，每只站立的兔子有 2 条腿。\n那么兔子有：4 ÷ 2 = 2 只！\n一共有5个头，减去2只兔子...\n鸡有：5 - 2 = 3 只！",
       visual: (
-        <div className="flex flex-col items-center font-bold text-2xl gap-4 my-8 bg-green-100 p-4 rounded-xl">
-           <div className="text-blue-700">🐰兔 = 4 ÷ 2 = 2 只</div>
-           <div className="text-amber-600">🐔鸡 = 5 - 2 = 3 只</div>
+        <div className="flex flex-col items-center font-bold text-[20px] md:text-2xl gap-4 my-8 bg-green-100 p-6 rounded-xl border-4 border-green-200">
+           <div className="text-blue-700 flex items-center gap-2">
+             <Rabbit size={32} className="text-blue-700" />
+             兔 = 4 ÷ 2 = 2 只
+           </div>
+           <div className="text-amber-600 flex items-center gap-2">
+             <Bird size={32} className="text-amber-600" />
+             鸡 = 5 - 2 = 3 只
+           </div>
         </div>
       )
     }

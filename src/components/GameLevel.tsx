@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Level } from '../levels';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Lightbulb, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Lightbulb, CheckCircle, Bird, Rabbit, Star } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { cn } from '../lib/utils';
 import { GuideModal } from './GuideModal';
@@ -67,17 +67,16 @@ export function GameLevel({ level, onBack, onWin }: GameLevelProps) {
           onWin(stars);
         }, 2000);
       }
-    } else if (level.type === 'logic') {
-       import('./AITutor').then(({ triggerAITutor }) => {
-         const prompt = `学生在第${level.id}关，题目是 ${level.heads} 个头，${level.legs} 条腿。学生输入的答案是 鸡=${chickenCount}，兔=${rabbitCount}。答案错了（算出的总腿数是${currentLegs}）。正确的答案是 鸡=${level.targetC}，兔=${level.targetR}。请作为AI导师，用启发式的语言引导他，指出他算出去的腿数和目标腿数的差异，并提示他使用假设法或抬腿法思考，只输出简短的一段对话，两三句话即可，不要直接给出最终答案。`;
-         triggerAITutor(prompt);
-       });
+    } else if (level.type === 'interactive') {
+      import('./AITutor').then(({ triggerAITutor }) => {
+        triggerAITutor(`哎呀，你放了 ${chickenCount} 只小鸡和 ${rabbitCount} 只小兔，总共虽然是 ${currentHeads} 只动物，但它们一共有 ${currentLegs} 条腿。我们要找的是 ${level.legs} 条腿哦。想一想，如果把一只兔子换成小鸡，或者把小鸡换成兔子，腿的总数会怎么变呢？`);
+      });
     }
   };
 
   // Auto-check for interactive mode
   useEffect(() => {
-    if (level.type === 'interactive' && currentHeads === level.heads && currentLegs === level.legs) {
+    if (level.type === 'interactive' && currentHeads === level.heads) {
        checkWin();
     }
   }, [currentHeads, currentLegs, level.type]);
@@ -103,18 +102,18 @@ export function GameLevel({ level, onBack, onWin }: GameLevelProps) {
         )}
         <div className="flex flex-col gap-2">
           {hintsUsed > 0 && (
-             <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} className="bg-yellow-100 p-4 rounded-xl border border-yellow-200 text-yellow-800 whitespace-pre-wrap">
-               💡 提示 1: {hintMessages[0]}
+             <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} className="bg-yellow-100 p-4 rounded-xl border border-yellow-200 text-yellow-800 whitespace-pre-wrap flex gap-2">
+               <Lightbulb className="w-5 h-5 shrink-0" /> <div>提示 1: {hintMessages[0]}</div>
              </motion.div>
           )}
           {hintsUsed > 1 && (
-             <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} className="bg-orange-100 p-4 rounded-xl border border-orange-200 text-orange-800 whitespace-pre-wrap mt-2">
-               💡 提示 2: {hintMessages[1]}
+             <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} className="bg-orange-100 p-4 rounded-xl border border-orange-200 text-orange-800 whitespace-pre-wrap mt-2 flex gap-2">
+               <Lightbulb className="w-5 h-5 shrink-0" /> <div>提示 2: {hintMessages[1]}</div>
              </motion.div>
           )}
           {hintsUsed > 2 && (
-             <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} className="bg-red-100 p-4 rounded-xl border border-red-200 text-red-800 whitespace-pre-wrap mt-2 font-bold !text-lg">
-               💡 提示 3: {hintMessages[2]}
+             <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} className="bg-red-100 p-4 rounded-xl border border-red-200 text-red-800 whitespace-pre-wrap mt-2 font-bold !text-lg flex gap-2">
+               <Lightbulb className="w-5 h-5 shrink-0" /> <div>提示 3: {hintMessages[2]}</div>
              </motion.div>
           )}
         </div>
@@ -130,7 +129,10 @@ export function GameLevel({ level, onBack, onWin }: GameLevelProps) {
           <ArrowLeft size={24} />
         </button>
         <div className="text-[20px] md:text-[28px] font-black text-[#854D0E] truncate px-4">第 {level.id} 关 : {level.title}</div>
-        <div className="text-[#EAB308] text-[24px] whitespace-nowrap hidden sm:block font-bold">🐔🐰</div>
+        <div className="text-[#EAB308] whitespace-nowrap hidden sm:flex items-center gap-2">
+          <Bird size={28} className="text-[#B45309]" />
+          <Rabbit size={28} className="text-[#15803D]" />
+        </div>
       </div>
 
       <div className="w-full max-w-3xl px-4 py-6 flex flex-col items-center flex-grow">
@@ -161,15 +163,15 @@ export function GameLevel({ level, onBack, onWin }: GameLevelProps) {
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleInteractiveTap(idx)}
                     className={cn(
-                      "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-[16px] flex flex-col items-center justify-center text-[32px] sm:text-[40px] transition-transform relative border-[3px]",
-                      state === 'none' ? "bg-[#F8FAFC] border-dashed border-[#CBD5E1] text-[#94A3B8]" :
+                      "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-[16px] flex flex-col items-center justify-center transition-transform relative border-[3px]",
+                      state === 'none' ? "bg-[#F8FAFC] border-dashed border-[#CBD5E1]" :
                       state === 'chicken' ? "bg-[#FEF3C7] border-solid border-[#F59E0B]" :
                       "bg-[#DCFCE7] border-solid border-[#22C55E]"
                     )}
                   >
-                    {state === 'none' && '?'}
-                    {state === 'chicken' && '🐥'}
-                    {state === 'rabbit' && '🐰'}
+                    {state === 'none' && <div className="w-4 h-4 rounded-full bg-[#E2E8F0]"/>}
+                    {state === 'chicken' && <Bird size={48} className="text-[#B45309]" />}
+                    {state === 'rabbit' && <Rabbit size={48} className="text-[#15803D]" />}
                   </motion.button>
                 ))}
               </AnimatePresence>
@@ -184,7 +186,7 @@ export function GameLevel({ level, onBack, onWin }: GameLevelProps) {
              <p className="text-center text-[#64748B] font-medium mb-6">动物太多啦，结合算式填写正确答案。</p>
              <div className="flex flex-col gap-6 max-w-lg mx-auto">
                 <div className="flex items-center gap-4 bg-[#FEF3C7] p-4 rounded-[16px] border-[3px] border-[#F59E0B]">
-                  <div className="text-5xl">🐥</div>
+                  <div className="w-12 h-12 flex items-center justify-center bg-white rounded-full"><Bird size={36} className="text-[#B45309]" /></div>
                   <div className="flex-grow">
                     <div className="text-[#B45309] font-bold mb-1">鸡的数量：</div>
                     <input 
@@ -197,7 +199,7 @@ export function GameLevel({ level, onBack, onWin }: GameLevelProps) {
                 </div>
 
                 <div className="flex items-center gap-4 bg-[#DCFCE7] p-4 rounded-[16px] border-[3px] border-[#22C55E]">
-                  <div className="text-5xl">🐰</div>
+                  <div className="w-12 h-12 flex items-center justify-center bg-white rounded-full"><Rabbit size={36} className="text-[#15803D]" /></div>
                   <div className="flex-grow">
                     <div className="text-[#15803D] font-bold mb-1">兔子的数量：</div>
                     <input 
@@ -257,6 +259,13 @@ export function GameLevel({ level, onBack, onWin }: GameLevelProps) {
           </motion.div>
         </motion.div>
       )}
+
+      <GuideModal 
+        isOpen={showGuide}
+        title="新手任务：农场调查员"
+        content="欢迎来到农场！点击下面这排灰色的格子，把它们变成小鸡或者是兔子。小鸡只有 2 条腿，小兔有 4 条腿。观察页面上方的要求，你的目标是让【头数】和【腿数】完全匹配！如果错了，AI 导师会跳出来引导你的思考思路哦！"
+        onClose={() => setShowGuide(false)}
+      />
 
     </div>
   );

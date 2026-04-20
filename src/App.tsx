@@ -29,7 +29,10 @@ export default function App() {
     if (!currentLevelId) return;
 
     setGameState(prev => {
-      const next = { ...prev };
+      const next = { 
+        unlockedLevels: [...prev.unlockedLevels], 
+        stars: { ...prev.stars } 
+      };
       
       const currentStars = next.stars[currentLevelId] || 0;
       if (stars > currentStars) {
@@ -40,7 +43,7 @@ export default function App() {
       if (currentLevelIndex >= 0 && currentLevelIndex < LEVELS.length - 1) {
         const nextId = LEVELS[currentLevelIndex + 1].id;
         if (!next.unlockedLevels.includes(nextId)) {
-          next.unlockedLevels = [...next.unlockedLevels, nextId];
+          next.unlockedLevels.push(nextId);
         }
       }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, CheckCircle, GripVertical } from 'lucide-react';
+import { ArrowLeft, CheckCircle, GripVertical, Package, ArrowUpLeft, ArrowUp } from 'lucide-react';
 import { checkWin } from '../store';
 import { cn } from '../lib/utils';
 import { triggerAITutor } from './AITutor';
@@ -148,7 +148,9 @@ export function FlowchartLevel({ onBack, onWin }: { onBack: () => void, onWin: (
       <div className="flex flex-1 overflow-hidden flex-col md:flex-row">
         {/* Block Bank */}
         <div className="w-full md:w-64 bg-white border-r-4 border-b-4 md:border-b-0 border-[#BFDBFE] p-4 overflow-y-auto shadow-md z-10">
-           <h3 className="font-bold text-[#0369A1] mb-4 text-center border-b-2 border-dashed border-[#BAE6FD] pb-2">📦 代码块仓库</h3>
+           <h3 className="font-bold text-[#0369A1] mb-4 text-center border-b-2 border-dashed border-[#BAE6FD] pb-2 flex items-center justify-center gap-2">
+             <Package size={20} className="text-[#0369A1]" /> 代码块仓库
+           </h3>
            <p className="text-xs text-[#64748B] mb-4 text-center">把这些块拖到右侧的流程图里，点击放置区可以取下。</p>
            <div className="flex flex-col gap-3">
              <AnimatePresence>
@@ -174,7 +176,7 @@ export function FlowchartLevel({ onBack, onWin }: { onBack: () => void, onWin: (
         </div>
 
         {/* Flowchart Area */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F0F9FF] relative flex justify-center pb-32">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F0F9FF] relative flex justify-center pb-52">
            <div className="flex flex-col items-center relative gap-2">
               <div className="bg-[#22C55E] text-white px-8 py-2 rounded-full border-2 border-[#16A34A] font-bold shadow-sm">开始</div>
               <div className="w-1 h-6 bg-[#CBD5E1]"></div>
@@ -188,7 +190,7 @@ export function FlowchartLevel({ onBack, onWin }: { onBack: () => void, onWin: (
               {/* Loop point */}
               <div className="relative">
                 <div className="absolute top-1/2 -left-12 -translate-y-1/2 flex items-center">
-                   <div className="text-xs text-[#64748B] font-bold mr-1">↖</div>
+                   <ArrowUpLeft size={16} className="text-[#64748B] font-bold mr-1" />
                    <div className="w-8 h-1 bg-[#CBD5E1]"></div>
                 </div>
                 {renderSlot(2, 'rect')} {/* 脚数量 c=a*2+b*4 */}
@@ -210,7 +212,9 @@ export function FlowchartLevel({ onBack, onWin }: { onBack: () => void, onWin: (
                      {/* Loop back visual indicator */}
                      <div className="flex mt-2 items-center flex-col relative right-8">
                        <div className="w-1 h-6 bg-[#CBD5E1]"></div>
-                       <div className="text-xs text-[#0369A1] font-bold bg-[#E0F2FE] px-2 py-1 rounded border border-[#BAE6FD]">(返回上方重新计算脚数👆)</div>
+                       <div className="text-xs text-[#0369A1] font-bold bg-[#E0F2FE] px-2 py-1 rounded border border-[#BAE6FD] flex items-center gap-1">
+                         (返回上方重新计算脚数 <ArrowUp size={14} />)
+                       </div>
                      </div>
                  </div>
 
@@ -222,7 +226,7 @@ export function FlowchartLevel({ onBack, onWin }: { onBack: () => void, onWin: (
                      <div className="w-1 h-6 bg-[#CBD5E1]"></div>
                      {renderSlot(7, 'parallelogram')} {/* 输出 b 的值 */}
                      <div className="w-1 h-6 bg-[#CBD5E1]"></div>
-                     <div className="bg-[#EF4444] text-white px-8 py-2 rounded-full border-2 border-[#B91C1C] font-bold shadow-sm">结束</div>
+                     <div className="bg-[#EF4444] text-white px-8 py-2 rounded-full border-2 border-[#B91C1C] font-bold shadow-sm mb-12">结束</div>
                  </div>
               </div>
               
@@ -231,7 +235,7 @@ export function FlowchartLevel({ onBack, onWin }: { onBack: () => void, onWin: (
       </div>
 
       {/* Footer validation */}
-      <div className="fixed bottom-0 md:bottom-4 left-0 md:left-[280px] right-0 p-4 bg-white border-t-4 border-[#E2E8F0] shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-20 flex justify-center">
+      <div className="fixed bottom-0 md:bottom-0 left-0 md:left-64 right-0 p-4 bg-white/90 backdrop-blur-sm border-t-4 border-[#E2E8F0] shadow-[0_-10px_20px_rgba(0,0,0,0.05)] z-20 flex justify-center rounded-none">
          <button 
            onClick={handleValidate}
            className="px-12 py-4 bg-[#22C55E] text-white font-bold text-xl rounded-[50px] shadow-[0_6px_0_#16A34A] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 hover:brightness-110"

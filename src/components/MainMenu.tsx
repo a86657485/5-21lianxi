@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { BookOpen, Map, Play, Lightbulb } from 'lucide-react';
+import { BookOpen, Map, Play, Lightbulb, Bird, Rabbit, Cloud } from 'lucide-react';
 
 interface MainMenuProps {
   onPlay: () => void;
@@ -15,23 +15,23 @@ export function MainMenu({ onPlay, onTutorial, onSandbox }: MainMenuProps) {
       <motion.div 
         animate={{ y: [0, -20, 0] }} 
         transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-        className="absolute top-10 left-10 text-6xl opacity-50 select-none"
+        className="absolute top-10 left-10 opacity-50 select-none text-[#15803D]"
       >
-        🐰
+        <Rabbit size={64} />
       </motion.div>
       <motion.div 
         animate={{ y: [0, -15, 0] }} 
         transition={{ repeat: Infinity, duration: 3, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-20 right-10 text-6xl opacity-50 select-none"
+        className="absolute bottom-20 right-10 opacity-50 select-none text-[#B45309]"
       >
-        🐔
+        <Bird size={64} />
       </motion.div>
       <motion.div 
         animate={{ rotate: [0, 10, -10, 0] }} 
         transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-        className="absolute top-20 right-20 text-6xl opacity-50 select-none"
+        className="absolute top-20 right-20 opacity-50 select-none text-[#7DD3FC]"
       >
-        ☁️
+        <Cloud size={64} fill="currentColor" />
       </motion.div>
 
       <motion.div
@@ -40,9 +40,9 @@ export function MainMenu({ onPlay, onTutorial, onSandbox }: MainMenuProps) {
         transition={{ type: "spring", bounce: 0.5 }}
         className="bg-white p-8 md:p-12 rounded-[24px] shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)] border-4 border-[#7DD3FC] text-center z-10 max-w-md w-full"
       >
-        <div className="flex justify-center gap-4 mb-4 text-[60px]">
-          <span>🐔</span>
-          <span>🐰</span>
+        <div className="flex justify-center flex-row gap-4 mb-4">
+          <div className="bg-[#FEFCE8] p-4 rounded-full border-4 border-[#FDE047]"><Bird size={48} className="text-[#A16207]"/></div>
+          <div className="bg-[#F1F5F9] p-4 rounded-full border-4 border-[#CBD5E1]"><Rabbit size={48} className="text-[#475569]"/></div>
         </div>
         <h1 className="text-4xl md:text-[40px] font-black text-[#854D0E] mb-2">
           鸡兔同笼
